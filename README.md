@@ -1,35 +1,37 @@
-# RAG Customer Service Portfolio
+# RAG Customer Service Demo
 
-一个用于作品集展示的 RAG 智能客服项目。业务资料为模拟内容，目标是练习从知识库、检索、提示词、评测到部署的完整流程。
+A portfolio project demonstrating the product design and implementation of a retrieval-augmented customer service experience.
 
-## 当前阶段
+## Overview
 
-- 静态聊天界面已完成，可直接打开 `frontend/index.html` 预览。
-- Worker 接口默认关闭，不会调用模型或消耗额度。
-- 下一阶段接入 Supabase pgvector、千问 Embedding 和生成模型。
+The project uses simulated, public-safe course-service content to explore a complete RAG workflow: knowledge-base preparation, retrieval, response generation, evaluation, and deployment.
 
-## 安全原则
+It is designed as a transparent demonstration rather than a production customer-service system. It does not process real orders, payments, or personal information.
 
-- 任何密钥只保存到 Cloudflare Worker Secrets，绝不提交到 GitHub。
-- `DEMO_ENABLED` 默认是 `false`，需要你手动开启后才允许真实问答。
-- `knowledge/` 只存放可公开展示的模拟资料。
+## Current Status
 
-## 本地运行
+The static chat experience and API foundation are in place. The retrieval pipeline is being developed with a vector database and Qwen models.
 
-聊天界面没有依赖，直接打开 `frontend/index.html` 即可查看。
-
-接入 Worker 前，需要安装 Node.js。之后在 `worker/` 目录运行：
-
-```bash
-npm test
-npm run dev
-```
-
-## 目录
+## Planned Architecture
 
 ```text
-frontend/   GitHub Pages 静态聊天页面
-worker/     Cloudflare Worker，负责安全开关和后续 RAG API
-knowledge/  公开的 Markdown 业务资料
+GitHub Pages -> Cloudflare Worker -> Qwen API + Supabase pgvector
 ```
 
+## Project Scope
+
+- RAG-based answers for simulated course and learning-service questions
+- Evidence-driven evaluation of answer quality and retrieval results
+- A portfolio-ready web experience that can be embedded in a personal site
+
+## Repository Structure
+
+```text
+frontend/   Static chat interface
+worker/     Backend API foundation
+knowledge/  Public-safe simulated knowledge-base materials
+```
+
+## Security and Documentation
+
+No credentials, real user data, or production business information are stored in this repository. Detailed implementation notes, evaluation records, and learning reflections are maintained separately.
