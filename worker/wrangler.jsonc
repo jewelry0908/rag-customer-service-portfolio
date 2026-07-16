@@ -1,0 +1,11 @@
+{
+  "name": "rag-customer-service-api",
+  "main": "src/index.js",
+  "compatibility_date": "2026-07-16",
+  "workers_dev": true,
+  "vars": {
+    "DEMO_ENABLED": "false",
+    "ALLOWED_ORIGIN": "http://localhost:8080"
+  }
+}
+

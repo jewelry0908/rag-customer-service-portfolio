@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="用于作品集展示的 RAG 智能客服演示。"
+    />
+    <title>AI 产品经理训练营 | 智能客服</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --canvas: #f5f7fb;
+        --surface: #ffffff;
+        --surface-muted: #edf1f7;
+        --ink: #172033;
+        --ink-muted: #66718a;
+        --line: #dce3ef;
+        --blue: #1d5fe9;
+        --blue-deep: #164abc;
+        --blue-soft: #eaf1ff;
+        --shadow: 0 24px 70px rgb(30 56 99 / 12%);
+        --radius: 18px;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --canvas: #10141d;
+          --surface: #171d29;
+          --surface-muted: #202938;
+          --ink: #f3f6fb;
+          --ink-muted: #aeb9ca;
+          --line: #303c50;
+          --blue: #79a7ff;
+          --blue-deep: #a8c4ff;
+          --blue-soft: #1b325d;
+          --shadow: 0 24px 70px rgb(0 0 0 / 22%);
+        }
+      }
+
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-width: 320px;
+        min-height: 100dvh;
+        background: var(--canvas);
+        color: var(--ink);
+        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      button, textarea { font: inherit; }
+      button { cursor: pointer; }
+
+      .shell {
+        width: min(1180px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 28px 0 44px;
+      }
+
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 44px;
+      }
+
+      .brand {
+        font-size: 15px;
+        font-weight: 760;
+        letter-spacing: -0.02em;
+      }
+
+      .status {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--ink-muted);
+        font-size: 13px;
+      }
+
+      .status-mark {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #d89027;
+      }
+
+      main {
+        display: grid;
+        grid-template-columns: minmax(250px, 0.78fr) minmax(0, 1.22fr);
+        gap: 44px;
+        align-items: start;
+      }
+
+      .intro { padding: 34px 0; }
+      .eyebrow {
+        margin: 0 0 16px;
+        color: var(--blue);
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      h1 {
+        max-width: 8ch;
+        margin: 0;
+        font-size: clamp(40px, 5vw, 68px);
+        letter-spacing: -0.065em;
+        line-height: 0.98;
+      }
+
+      .intro-copy {
+        max-width: 32ch;
+        margin: 24px 0 0;
+        color: var(--ink-muted);
+        font-size: 16px;
+        line-height: 1.8;
+      }
+
+      .facts {
+        display: grid;
+        gap: 14px;
+        margin: 42px 0 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .facts li {
+        padding-left: 14px;
+        border-left: 2px solid var(--line);
+        color: var(--ink-muted);
+        font-size: 14px;
+        line-height: 1.55;
+      }
+
+      .facts strong { color: var(--ink); }
+
+      .chat {
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--surface);
+        box-shadow: var(--shadow);
+      }
+
+      .chat-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 18px 20px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .chat-title { font-size: 14px; font-weight: 750; }
+      .chat-caption { color: var(--ink-muted); font-size: 12px; }
+
+      #messages {
+        display: grid;
+        align-content: start;
+        gap: 16px;
+        min-height: 390px;
+        max-height: 52dvh;
+        overflow-y: auto;
+        padding: 22px 20px;
+      }
+
+      .message {
+        width: fit-content;
+        max-width: min(92%, 470px);
+        padding: 13px 15px;
+        border-radius: 14px;
+        font-size: 14px;
+        line-height: 1.65;
+      }
+
+      .assistant { background: var(--surface-muted); }
+      .user { justify-self: end; background: var(--blue); color: #fff; }
+      .notice { border: 1px solid var(--line); background: transparent; color: var(--ink-muted); }
+
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 0 20px 18px;
+      }
+
+      .chip {
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: transparent;
+        color: var(--ink-muted);
+        padding: 8px 11px;
+        font-size: 12px;
+        transition: border-color .2s ease, color .2s ease, transform .2s ease;
+      }
+
+      .chip:hover { border-color: var(--blue); color: var(--blue); }
+      .chip:active { transform: translateY(1px); }
+
+      form {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 10px;
+        padding: 16px 20px 20px;
+        border-top: 1px solid var(--line);
+      }
+
+      textarea {
+        min-height: 48px;
+        max-height: 120px;
+        resize: vertical;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: transparent;
+        color: var(--ink);
+        padding: 13px;
+        outline: none;
+      }
+
+      textarea:focus { border-color: var(--blue); box-shadow: 0 0 0 3px color-mix(in srgb, var(--blue) 18%, transparent); }
+
+      .send {
+        align-self: end;
+        min-height: 48px;
+        border: 0;
+        border-radius: 12px;
+        background: var(--blue);
+        color: #fff;
+        padding: 0 16px;
+        font-size: 14px;
+        font-weight: 720;
+        transition: background .2s ease, transform .2s ease;
+      }
+
+      .send:hover { background: var(--blue-deep); }
+      .send:active { transform: translateY(1px); }
+      .send:disabled { cursor: not-allowed; opacity: .6; }
+
+      .privacy {
+        margin: 0;
+        padding: 0 20px 20px;
+        color: var(--ink-muted);
+        font-size: 11px;
+        line-height: 1.55;
+      }
+
+      @media (max-width: 800px) {
+        .shell { width: min(100% - 32px, 640px); padding-top: 20px; }
+        header { margin-bottom: 24px; }
+        main { grid-template-columns: 1fr; gap: 22px; }
+        .intro { padding: 12px 0 4px; }
+        .facts { margin-top: 26px; }
+        #messages { min-height: 340px; max-height: none; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { transition-duration: 0.01ms !important; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <header>
+        <div class="brand">AI 产品经理训练营</div>
+        <div class="status"><span class="status-mark" aria-hidden="true"></span>体验暂未开启</div>
+      </header>
+
+      <main>
+        <section class="intro" aria-labelledby="page-title">
+          <p class="eyebrow">RAG 智能客服演示</p>
+          <h1 id="page-title">把课程规则说清楚。</h1>
+          <p class="intro-copy">这是一个独立的作品集 Demo。它将基于经过评测的课程资料回答问题，在涉及订单、隐私与投诉时安全地转交人工支持。</p>
+          <ul class="facts">
+            <li><strong>知识来源</strong><br />8 份版本化模拟业务资料</li>
+            <li><strong>回答边界</strong><br />不处理订单、支付或个人敏感信息</li>
+            <li><strong>当前状态</strong><br />界面已就绪，真实模型调用默认关闭</li>
+          </ul>
+        </section>
+
+        <section class="chat" aria-label="智能客服对话窗口">
+          <div class="chat-top">
+            <div class="chat-title">课程咨询助手</div>
+            <div class="chat-caption">仅回答公开课程资料</div>
+          </div>
+          <div id="messages" aria-live="polite">
+            <div class="message assistant">你好，我可以回答课程介绍、学习安排、价格和公开规则。当前体验尚未开启真实知识库调用。</div>
+          </div>
+          <div class="chips" aria-label="示例问题">
+            <button class="chip" type="button">课程适合零基础吗？</button>
+            <button class="chip" type="button">课程可以学习多久？</button>
+            <button class="chip" type="button">退款规则是什么？</button>
+          </div>
+          <form id="chat-form">
+            <textarea id="question" maxlength="500" placeholder="输入你的问题" aria-label="输入你的问题"></textarea>
+            <button class="send" type="submit">发送</button>
+          </form>
+          <p class="privacy">请不要发送手机号、订单号、支付信息或其他个人敏感信息。</p>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      // Deploy later by setting: window.RAG_WORKER_URL = "https://your-worker.workers.dev".
+      window.RAG_WORKER_URL = "";
+
+      const form = document.querySelector("#chat-form");
+      const input = document.querySelector("#question");
+      const messages = document.querySelector("#messages");
+      const chips = document.querySelectorAll(".chip");
+
+      function addMessage(text, role) {
+        const bubble = document.createElement("div");
+        bubble.className = `message ${role}`;
+        bubble.textContent = text;
+        messages.appendChild(bubble);
+        messages.scrollTop = messages.scrollHeight;
+      }
+
+      async function ask(question) {
+        const workerUrl = window.RAG_WORKER_URL.trim();
+        addMessage(question, "user");
+
+        if (!workerUrl) {
+          addMessage("本地界面已就绪。真实 RAG 接口尚未连接，因此没有调用模型或产生费用。", "notice");
+          return;
+        }
+
+        const submitButton = form.querySelector("button");
+        submitButton.disabled = true;
+        try {
+          const response = await fetch(`${workerUrl.replace(/\\/$/, "")}/api/chat`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ question })
+          });
+          const data = await response.json();
+          addMessage(data.answer || data.message || "服务暂时不可用，请稍后再试。", "assistant");
+        } catch {
+          addMessage("暂时无法连接服务。请稍后再试。", "notice");
+        } finally {
+          submitButton.disabled = false;
+        }
+      }
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const question = input.value.trim();
+        if (!question) return;
+        input.value = "";
+        ask(question);
+      });
+
+      chips.forEach((chip) => {
+        chip.addEventListener("click", () => {
+          input.value = chip.textContent;
+          input.focus();
+        });
+      });
+    </script>
+  </body>
+</html>
+
