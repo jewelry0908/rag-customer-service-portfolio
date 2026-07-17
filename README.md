@@ -10,7 +10,7 @@ It is designed as a transparent demonstration rather than a production customer-
 
 ## Current Status
 
-The static chat experience and API foundation are in place. The retrieval pipeline is being developed with a vector database and Qwen models.
+The static chat experience, retrieval pipeline, and API connection are in place. The public demo is controlled by a server-side switch and is disabled by default.
 
 ## Planned Architecture
 
@@ -27,6 +27,7 @@ GitHub Pages -> Cloudflare Worker -> Qwen API + Supabase pgvector
 ## Repository Structure
 
 ```text
+index.html  GitHub Pages entry point
 frontend/   Static chat interface
 worker/     Backend API foundation
 knowledge/  Public-safe simulated knowledge-base materials
