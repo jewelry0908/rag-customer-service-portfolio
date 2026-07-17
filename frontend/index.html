@@ -5,37 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="用于作品集展示的 RAG 智能客服演示。"
+      content="AI 产品经理实战训练营课程咨询体验版，基于 RAG 知识库回答课程相关问题。"
     />
-    <title>AI 产品经理训练营 | 智能客服</title>
+    <title>课程咨询体验版 | AI 产品经理实战训练营</title>
     <style>
       :root {
         color-scheme: light dark;
-        --canvas: #f5f7fb;
+        --canvas: #f3f5f8;
         --surface: #ffffff;
-        --surface-muted: #edf1f7;
-        --ink: #172033;
-        --ink-muted: #66718a;
-        --line: #dce3ef;
-        --blue: #1d5fe9;
-        --blue-deep: #164abc;
-        --blue-soft: #eaf1ff;
-        --shadow: 0 24px 70px rgb(30 56 99 / 12%);
-        --radius: 18px;
+        --surface-muted: #eef1f6;
+        --ink: #151923;
+        --ink-muted: #5d687a;
+        --line: #d7deea;
+        --blue: #2762d9;
+        --blue-deep: #1f4ea8;
+        --blue-soft: #edf3ff;
+        --shadow: 0 18px 48px rgb(24 38 69 / 9%);
+        --radius-large: 20px;
+        --radius-control: 12px;
       }
 
       @media (prefers-color-scheme: dark) {
         :root {
-          --canvas: #10141d;
-          --surface: #171d29;
-          --surface-muted: #202938;
-          --ink: #f3f6fb;
-          --ink-muted: #aeb9ca;
-          --line: #303c50;
-          --blue: #79a7ff;
-          --blue-deep: #a8c4ff;
-          --blue-soft: #1b325d;
-          --shadow: 0 24px 70px rgb(0 0 0 / 22%);
+          --canvas: #0f1117;
+          --surface: #171b25;
+          --surface-muted: #202634;
+          --ink: #f4f6fa;
+          --ink-muted: #adb7c8;
+          --line: #30394a;
+          --blue: #78a2ff;
+          --blue-deep: #a7c2ff;
+          --blue-soft: #1d315b;
+          --shadow: 0 18px 48px rgb(0 0 0 / 20%);
         }
       }
 
@@ -46,16 +47,27 @@
         min-height: 100dvh;
         background: var(--canvas);
         color: var(--ink);
-        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
       }
 
       button, textarea { font: inherit; }
       button { cursor: pointer; }
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
 
       .shell {
-        width: min(1180px, calc(100% - 32px));
+        width: min(1240px, calc(100% - 48px));
         margin: 0 auto;
-        padding: 28px 0 44px;
+        padding: 24px 0 56px;
       }
 
       header {
@@ -63,83 +75,102 @@
         align-items: center;
         justify-content: space-between;
         gap: 16px;
-        margin-bottom: 44px;
+        min-height: 44px;
+        margin-bottom: clamp(36px, 5vw, 64px);
       }
 
       .brand {
         font-size: 15px;
-        font-weight: 760;
+        font-weight: 700;
         letter-spacing: -0.02em;
       }
 
       .status {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        color: var(--ink-muted);
+        color: var(--blue);
         font-size: 13px;
-      }
-
-      .status-mark {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: #d89027;
+        font-weight: 650;
       }
 
       main {
         display: grid;
-        grid-template-columns: minmax(250px, 0.78fr) minmax(0, 1.22fr);
-        gap: 44px;
+        grid-template-columns: minmax(290px, 0.74fr) minmax(0, 1.26fr);
+        gap: clamp(40px, 6vw, 88px);
         align-items: start;
       }
 
-      .intro { padding: 34px 0; }
+      .intro { padding: 10px 0 0; }
       .eyebrow {
-        margin: 0 0 16px;
+        margin: 0 0 18px;
         color: var(--blue);
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+      }
+
+      h1 {
+        max-width: 10ch;
+        margin: 0;
+        font-size: clamp(44px, 4.6vw, 64px);
+        font-weight: 750;
+        letter-spacing: -0.055em;
+        line-height: 1.08;
+      }
+
+      .intro-copy {
+        max-width: 35ch;
+        margin: 22px 0 0;
+        color: var(--ink-muted);
+        font-size: 16px;
+        line-height: 1.75;
+      }
+
+      .overview {
+        display: grid;
+        gap: 20px;
+        margin: 40px 0 0;
+        padding: 0;
+      }
+
+      .overview-item {
+        padding-left: 16px;
+        border-left: 1px solid var(--line);
+      }
+
+      .overview dt {
+        margin: 0 0 5px;
+        color: var(--ink);
         font-size: 13px;
         font-weight: 700;
       }
 
-      h1 {
-        max-width: 8ch;
+      .overview dd {
         margin: 0;
-        font-size: clamp(40px, 5vw, 68px);
-        letter-spacing: -0.065em;
-        line-height: 0.98;
-      }
-
-      .intro-copy {
-        max-width: 32ch;
-        margin: 24px 0 0;
-        color: var(--ink-muted);
-        font-size: 16px;
-        line-height: 1.8;
-      }
-
-      .facts {
-        display: grid;
-        gap: 14px;
-        margin: 42px 0 0;
-        padding: 0;
-        list-style: none;
-      }
-
-      .facts li {
-        padding-left: 14px;
-        border-left: 2px solid var(--line);
         color: var(--ink-muted);
         font-size: 14px;
-        line-height: 1.55;
+        line-height: 1.65;
       }
 
-      .facts strong { color: var(--ink); }
+      .tech-stack {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      .tech-stack span {
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: var(--blue-soft);
+        color: var(--blue);
+        padding: 4px 8px;
+        font-size: 12px;
+        font-weight: 650;
+        line-height: 1.2;
+      }
 
       .chat {
         overflow: hidden;
         border: 1px solid var(--line);
-        border-radius: var(--radius);
+        border-radius: var(--radius-large);
         background: var(--surface);
         box-shadow: var(--shadow);
       }
@@ -149,30 +180,30 @@
         align-items: center;
         justify-content: space-between;
         gap: 16px;
-        padding: 18px 20px;
+        padding: 19px 24px;
         border-bottom: 1px solid var(--line);
       }
 
-      .chat-title { font-size: 14px; font-weight: 750; }
+      .chat-title { font-size: 15px; font-weight: 700; }
       .chat-caption { color: var(--ink-muted); font-size: 12px; }
 
       #messages {
         display: grid;
         align-content: start;
         gap: 16px;
-        min-height: 390px;
-        max-height: 52dvh;
+        min-height: 360px;
+        max-height: 48dvh;
         overflow-y: auto;
-        padding: 22px 20px;
+        padding: 24px;
       }
 
       .message {
         width: fit-content;
-        max-width: min(92%, 470px);
-        padding: 13px 15px;
+        max-width: min(88%, 500px);
+        padding: 14px 16px;
         border-radius: 14px;
         font-size: 14px;
-        line-height: 1.65;
+        line-height: 1.7;
       }
 
       .assistant { background: var(--surface-muted); }
@@ -185,7 +216,7 @@
         display: flex;
         flex-wrap: wrap;
         gap: 8px;
-        padding: 0 20px 18px;
+        padding: 0 24px 20px;
       }
 
       .chip {
@@ -193,7 +224,7 @@
         border-radius: 999px;
         background: transparent;
         color: var(--ink-muted);
-        padding: 8px 11px;
+        padding: 8px 12px;
         font-size: 12px;
         transition: border-color .2s ease, color .2s ease, transform .2s ease;
       }
@@ -205,19 +236,19 @@
         display: grid;
         grid-template-columns: 1fr auto;
         gap: 10px;
-        padding: 16px 20px 20px;
+        padding: 18px 24px 14px;
         border-top: 1px solid var(--line);
       }
 
       textarea {
-        min-height: 48px;
+        min-height: 54px;
         max-height: 120px;
         resize: vertical;
         border: 1px solid var(--line);
-        border-radius: 12px;
+        border-radius: var(--radius-control);
         background: transparent;
         color: var(--ink);
-        padding: 13px;
+        padding: 14px;
         outline: none;
       }
 
@@ -225,14 +256,14 @@
 
       .send {
         align-self: end;
-        min-height: 48px;
+        min-height: 54px;
         border: 0;
-        border-radius: 12px;
+        border-radius: var(--radius-control);
         background: var(--blue);
         color: #fff;
-        padding: 0 16px;
+        padding: 0 18px;
         font-size: 14px;
-        font-weight: 720;
+        font-weight: 700;
         transition: background .2s ease, transform .2s ease;
       }
 
@@ -242,19 +273,29 @@
 
       .privacy {
         margin: 0;
-        padding: 0 20px 20px;
+        padding: 0 24px 22px;
         color: var(--ink-muted);
         font-size: 11px;
-        line-height: 1.55;
+        line-height: 1.6;
       }
 
-      @media (max-width: 800px) {
-        .shell { width: min(100% - 32px, 640px); padding-top: 20px; }
-        header { margin-bottom: 24px; }
-        main { grid-template-columns: 1fr; gap: 22px; }
-        .intro { padding: 12px 0 4px; }
-        .facts { margin-top: 26px; }
+      @media (max-width: 900px) {
+        .shell { width: min(100% - 32px, 680px); padding-top: 20px; }
+        header { margin-bottom: 32px; }
+        main { grid-template-columns: 1fr; gap: 30px; }
+        .intro { padding: 0; }
+        .overview { margin-top: 30px; }
         #messages { min-height: 340px; max-height: none; }
+      }
+
+      @media (max-width: 560px) {
+        .shell { width: min(100% - 28px, 680px); }
+        h1 { font-size: clamp(40px, 12vw, 54px); }
+        .chat-top, #messages, .chips, form { padding-left: 18px; padding-right: 18px; }
+        .chat-top { align-items: flex-start; flex-direction: column; gap: 5px; }
+        form { grid-template-columns: 1fr; padding-bottom: 12px; }
+        .send { width: 100%; }
+        .privacy { padding: 0 18px 18px; }
       }
 
       @media (prefers-reduced-motion: reduce) {
@@ -265,40 +306,54 @@
   <body>
     <div class="shell">
       <header>
-        <div class="brand">AI 产品经理训练营</div>
-        <div class="status"><span class="status-mark" aria-hidden="true"></span>体验由管理员按需开启</div>
+        <div class="brand">AI 产品经理实战训练营</div>
+        <div class="status">课程咨询体验版</div>
       </header>
 
       <main>
         <section class="intro" aria-labelledby="page-title">
-          <p class="eyebrow">RAG 智能客服演示</p>
-          <h1 id="page-title">把课程规则说清楚。</h1>
-          <p class="intro-copy">这是一个独立的作品集 Demo。它将基于经过评测的课程资料回答问题，在涉及订单、隐私与投诉时安全地转交人工支持。</p>
-          <ul class="facts">
-            <li><strong>知识来源</strong><br />8 份版本化模拟业务资料</li>
-            <li><strong>回答边界</strong><br />不处理订单、支付或个人敏感信息</li>
-            <li><strong>当前状态</strong><br />真实模型调用由后台安全开关控制</li>
-          </ul>
+          <p class="eyebrow">课程咨询智能服务</p>
+          <h1 id="page-title">课程咨询，有据可查。</h1>
+          <p class="intro-copy">面向准备了解课程的用户，提供课程内容、学习安排、价格权益和公开规则咨询。</p>
+          <dl class="overview">
+            <div class="overview-item">
+              <dt>适用场景</dt>
+              <dd>覆盖购买前和学习前的高频课程咨询，减少重复查找规则的成本。</dd>
+            </div>
+            <div class="overview-item">
+              <dt>可以咨询</dt>
+              <dd>课程介绍、学习安排、价格权益、退款改期与公开服务规则。</dd>
+            </div>
+            <div class="overview-item">
+              <dt>技术能力</dt>
+              <dd class="tech-stack"><span>RAG 知识库</span><span>向量检索</span><span>大模型生成</span><span>来源引用</span></dd>
+            </div>
+            <div class="overview-item">
+              <dt>服务边界</dt>
+              <dd>涉及真实订单、账号、支付或个人敏感信息时，请通过人工渠道处理。</dd>
+            </div>
+          </dl>
         </section>
 
         <section class="chat" aria-label="智能客服对话窗口">
           <div class="chat-top">
             <div class="chat-title">课程咨询助手</div>
-            <div class="chat-caption">仅回答公开课程资料</div>
+            <div class="chat-caption">基于公开课程资料回答</div>
           </div>
           <div id="messages" aria-live="polite">
-            <div class="message assistant">你好，我可以回答课程介绍、学习安排、价格和公开规则；涉及订单、支付或个人信息时会转人工处理。</div>
+            <div class="message assistant">你好，我可以帮助你了解课程内容、学习安排、价格权益和公开规则。回答会附上相关资料来源；涉及真实订单、支付或个人信息时，请通过人工渠道处理。</div>
           </div>
           <div class="chips" aria-label="示例问题">
-            <button class="chip" type="button">课程适合零基础吗？</button>
-            <button class="chip" type="button">课程可以学习多久？</button>
+            <button class="chip" type="button">课程适合哪些人？</button>
+            <button class="chip" type="button">学习周期是多久？</button>
             <button class="chip" type="button">退款规则是什么？</button>
           </div>
           <form id="chat-form">
-            <textarea id="question" maxlength="500" placeholder="输入你的问题" aria-label="输入你的问题"></textarea>
+            <label class="sr-only" for="question">请输入你的问题</label>
+            <textarea id="question" maxlength="500" placeholder="例如：课程适合零基础学习吗？"></textarea>
             <button class="send" type="submit">发送</button>
           </form>
-          <p class="privacy">请不要发送手机号、订单号、支付信息或其他个人敏感信息。</p>
+          <p class="privacy">为保护你的信息，请不要在对话中提交订单号、支付信息或其他敏感资料。</p>
         </section>
       </main>
     </div>
@@ -332,7 +387,7 @@
           sources.forEach((source, index) => {
             const item = document.createElement("div");
             item.className = "source";
-            item.textContent = `来源 ${index + 1} · ${source.title}｜${source.heading} · 相似度 ${source.similarity}`;
+            item.textContent = `来源 ${index + 1}：${source.title} / ${source.heading}（相似度 ${source.similarity}）`;
             sourceList.appendChild(item);
           });
           bubble.appendChild(sourceList);
