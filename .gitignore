@@ -1,8 +1,9 @@
 node_modules/
 .wrangler/
+.npm-cache/
 .dev.vars
 .env
 .env.*
 !.env.example
+knowledge/chunks.json
 .DS_Store
-
